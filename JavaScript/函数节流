@@ -1,0 +1,17 @@
+函数节流(throttle)是指阻止一个函数在很短时间间隔内连续调用。 只有当上一次函数执行后达到规定的时间间隔，才能进行下一次调用。 但要保证一个累计最小调用间隔（否则拖拽类的节流都将无连续效果）；
+函数节流用于 onresize, onscroll 等短时间内会多次触发的事件；
+函数节流的原理：使用定时器做时间节流。 当触发一个事件时，先用 setTimout 让这个事件延迟一小段时间再执行。 如果在这个时间间隔内又触发了事件，就 clearTimeout 原来的定时器， 再 setTimeout 一个新的定时器重复以上流程。
+
+简单实现：
+
+function throttle(method, context) {
+    clearTimeout(method.ID); //clearTimeout放在头部
+    method.ID = setTimeout(function() {
+        method.call(context); //需要执行的函数
+    }, 100); //两次调用间隔为100ms
+}
+
+//调用
+window.onresize = function() {
+    throttle(myFunc, window);
+}
